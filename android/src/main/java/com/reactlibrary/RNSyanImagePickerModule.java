@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.util.Base64;
 
 import com.facebook.react.bridge.ActivityEventListener;
@@ -26,8 +28,12 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.PictureFileUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
 
@@ -114,7 +120,6 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
      * 打开相册选择
      */
     private void openImagePicker() {
-        int mimeType = this.cameraOptions.getInt("mimeType");
         int imageCount = this.cameraOptions.getInt("imageCount");
         boolean isCamera = this.cameraOptions.getBoolean("isCamera");
         boolean isCrop = this.cameraOptions.getBoolean("isCrop");
@@ -134,7 +139,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         }
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
-                .openGallery(mimeType)//全部.0 - PictureMimeType.ofAll()、1 - 图片.ofImage()、2 - 视频.ofVideo()、3 - 音频.ofAudio()
+                .openGallery(PictureMimeType.ofAll())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .maxSelectNum(imageCount)// 最大图片选择数量 int
                 .minSelectNum(0)// 最小选择数量 int
                 .imageSpanCount(4)// 每行显示个数 int
@@ -224,6 +229,10 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
                             // 视频
                             aImage.putString("type", "video");
                             aImage.putString("uri", "file://" + media.getPath());
+
+                            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(media.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+                            String thumbnailPath = saveBitmap(bitmap);
+                            aImage.putString("thumbnailUri","file://"+thumbnailPath);
                         } else if(media.getPictureType().contains("image")){
                             // 图片
                             boolean enableBase64 = cameraOptions.getBoolean("enableBase64");
@@ -296,6 +305,26 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         byte[] encode = Base64.encode(bytes,Base64.DEFAULT);
         String encodeString = new String(encode);
         return "data:image/jpeg;base64," + encodeString;
+    }
+
+    /**
+     * 保存bitmap
+     * @param bitmap
+     */
+    public String saveBitmap(Bitmap bitmap){
+        String path = null;
+        try {
+            File fileDir = getCurrentActivity().getExternalFilesDir(null);
+            fileDir.mkdirs();
+            File file = new File(fileDir, UUID.randomUUID()+".png");
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.close();
+            path = file.getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path;
     }
 
     /**
