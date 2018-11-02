@@ -118,6 +118,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
      * 打开相册选择
      */
     private void openImagePicker() {
+        int mimeType = this.cameraOptions.getInt("mimeType");
         int imageCount = this.cameraOptions.getInt("imageCount");
         boolean isCamera = this.cameraOptions.getBoolean("isCamera");
         boolean isCrop = this.cameraOptions.getBoolean("isCrop");
@@ -137,7 +138,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         }
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
-                .openGallery(PictureMimeType.ofAll())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .openGallery(mimeType)//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .maxSelectNum(imageCount)// 最大图片选择数量 int
                 .minSelectNum(0)// 最小选择数量 int
                 .imageSpanCount(4)// 每行显示个数 int
