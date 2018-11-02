@@ -181,6 +181,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
      * 打开相机
      */
     private void openCamera() {
+        int mimeType = this.cameraOptions.getInt("mimeType");
         boolean isCrop = this.cameraOptions.getBoolean("isCrop");
         int CropW = this.cameraOptions.getInt("CropW");
         int CropH = this.cameraOptions.getInt("CropH");
@@ -191,8 +192,9 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
 
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
-                .openCamera(PictureMimeType.ofImage())
+                .openCamera(mimeType)
                 .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .previewVideo(true)// 是否可预览视频 true or false
                 .enableCrop(isCrop)// 是否裁剪 true or false
                 .compress(true)// 是否压缩 true or false
                 .glideOverride(160, 160)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
