@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.util.Base64;
 
 import com.facebook.react.bridge.ActivityEventListener;
@@ -230,9 +232,9 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
                             aImage.putString("uri", "file://" + media.getPath());
                             aImage.putString("duration",media.getDuration()+"");
 
-                            /*Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(media.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+                            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(media.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
                             String thumbnailPath = saveBitmap(bitmap);
-                            aImage.putString("thumbnailUri","file://"+thumbnailPath);*/
+                            aImage.putString("thumbnailUri","file://"+thumbnailPath);
                         } else if(media.getPictureType().contains("image")){
                             // 图片
                             boolean enableBase64 = cameraOptions.getBoolean("enableBase64");
