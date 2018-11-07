@@ -189,6 +189,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         boolean showCropFrame = this.cameraOptions.getBoolean("showCropFrame");
         boolean showCropGrid = this.cameraOptions.getBoolean("showCropGrid");
         int quality = this.cameraOptions.getInt("quality");
+        int recordVideoSecond = this.cameraOptions.getInt("recordVideoSecond");
 
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
@@ -210,6 +211,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
                 .synOrAsy(true)//同步true或异步false 压缩 默认同步
                 .rotateEnabled(true) // 裁剪是否可旋转图片 true or false
                 .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
+                .recordVideoSecond(recordVideoSecond) //视频秒数录制 默认60s int
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
 
