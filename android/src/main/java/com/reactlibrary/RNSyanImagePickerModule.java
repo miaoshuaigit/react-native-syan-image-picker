@@ -173,7 +173,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
                 //.videoQuality(0)// 视频录制质量 0 or 1 int
                 //.videoMaxSecond(15)// 显示多少秒以内的视频or音频也可适用 int
                 //.videoMinSecond(10)// 显示多少秒以内的视频or音频也可适用 int
-                //.recordVideoSecond(60)//视频秒数录制 默认60s int
+                .recordVideoSecond(120)//视频秒数录制 默认60s int
                 .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
     }
 
